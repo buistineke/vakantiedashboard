@@ -17,6 +17,7 @@
     --line:#f0e0d2;
     --terracotta:#e2703f;
     --terracotta-soft:#fbe3d3;
+    --terracotta-dark:#b6491c;
     --mauve:#8b4f63;
     --mauve-soft:#f7e6e1;
     --coral:#d9553a;
@@ -57,8 +58,8 @@
     font-size:12px;
     font-weight:600;
     letter-spacing:0.04em;
-    color:var(--terracotta);
-    background:var(--terracotta-soft);
+    color:#fbe9dc;
+    background:var(--terracotta-dark);
     padding:5px 12px 5px 10px;
     border-radius:8px;
     margin-bottom:16px;
@@ -109,11 +110,11 @@
     content:'';
     position:absolute;
     left:23px;
-    top:8px;
-    bottom:8px;
+    top:var(--line-start, 8px);
+    bottom:var(--line-end, 8px);
     width:2px;
-    background:linear-gradient(to bottom, var(--terracotta), var(--mauve));
-    opacity:0.25;
+    background:var(--terracotta-dark);
+    opacity:0.35;
     border-radius:2px;
   }
 
@@ -129,7 +130,7 @@
     width:24px;
     height:24px;
     border-radius:50%;
-    background:linear-gradient(135deg, var(--terracotta), var(--mauve));
+    background:var(--terracotta-dark);
     color:#fff;
     display:flex;
     align-items:center;
@@ -188,12 +189,12 @@
     gap:6px;
     font-size:13.5px;
     font-weight:600;
-    background:var(--terracotta-soft);
-    color:#a8461f;
     padding:6px 12px;
     border-radius:8px;
     white-space:nowrap;
   }
+  .weather-chip.good{background:#fdf0b8;color:#8a6a1a;}
+  .weather-chip.bad{background:#dde5ee;color:#51687f;}
   .weather-chip.pending{
     background:#f1e8dd;
     color:var(--faint);
@@ -234,6 +235,8 @@
     border-radius:10px;
     padding:14px 16px;
   }
+  .weather-detail.good{background:#fdf0b8;}
+  .weather-detail.bad{background:#dde5ee;}
   .icon-big{font-size:32px;line-height:1;}
   .temp-max{font-size:24px;font-weight:800;letter-spacing:-0.01em;}
   .temp-min{color:var(--faint);font-size:15px;font-weight:500;}
@@ -312,7 +315,7 @@
   <div class="hero-inner">
     <span class="eyebrow">🧭 28 aug — 16 sept</span>
     <h1>Roadtrip 2026</h1>
-    <p>Groningen tot aan het Gardameer en terug via de Balkan — 7 bestemmingen, 8 landen, één auto vol hesjes en een brandblusser.</p>
+    <p>Groningen tot aan het Gardameer en terug via de Balkan</p>
     <div class="hero-stats">
       <div class="stat-pill"><b>7</b><span>Bestemmingen</span></div>
       <div class="stat-pill"><b>3527</b><span>Kilometer</span></div>
@@ -451,6 +454,8 @@ function daysUntil(d){
   return Math.round((dt-today)/86400000);
 }
 
+const GOOD_WEATHER_CODES = new Set([0,1,2,3]);
+
 async function fetchWeather(stop){
   const el = document.getElementById('w-'+stop.name);
   const bodyEl = document.getElementById('wd-'+stop.name);
@@ -471,9 +476,11 @@ async function fetchWeather(stop){
     const tmax = Math.round(data.daily.temperature_2m_max[0]);
     const tmin = Math.round(data.daily.temperature_2m_min[0]);
     const [label, icon] = WMO[code] || ["Onbekend","❓"];
+    const cond = GOOD_WEATHER_CODES.has(code) ? 'good' : 'bad';
+    el.classList.add(cond);
     el.innerHTML = `${icon} ${tmax}° / ${tmin}°`;
     bodyEl.innerHTML = `
-      <div class="weather-detail">
+      <div class="weather-detail ${cond}">
         <span class="icon-big">${icon}</span>
         <div>
           <div><span class="temp-max">${tmax}°</span> <span class="temp-min">/ ${tmin}°</span></div>
@@ -529,6 +536,19 @@ stops.forEach((stop, i) => {
   container.appendChild(div);
   fetchWeather(stop);
 });
+
+function updateRailLine(){
+  const dots = container.querySelectorAll('.dot');
+  if(!dots.length) return;
+  const containerRect = container.getBoundingClientRect();
+  const firstRect = dots[0].getBoundingClientRect();
+  const lastRect = dots[dots.length-1].getBoundingClientRect();
+  container.style.setProperty('--line-start', (firstRect.bottom - containerRect.top) + 'px');
+  container.style.setProperty('--line-end', (containerRect.bottom - lastRect.top) + 'px');
+}
+updateRailLine();
+container.addEventListener('toggle', updateRailLine, true);
+window.addEventListener('resize', updateRailLine);
 </script>
 </body>
 </html>
