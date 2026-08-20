@@ -94,6 +94,7 @@
   }
   .stat-pill b{display:block;font-size:17px;font-weight:800;letter-spacing:-0.01em;}
   .stat-pill span{color:var(--faint);font-size:11.5px;text-transform:uppercase;letter-spacing:0.04em;}
+  .stat-pill--countdown{background:var(--terracotta-soft);border-color:transparent;}
 
   /* Layout */
   main{
@@ -306,6 +307,7 @@
     .stop{padding-left:52px;}
     .dot{left:6px;}
     .rail::before{left:17px;}
+    .stat-pill--countdown{flex-basis:100%;}
   }
 </style>
 </head>
@@ -315,9 +317,11 @@
   <div class="hero-inner">
     <span class="eyebrow">🧭 28 aug — 16 sept</span>
     <h1>Roadtrip 2026</h1>
-    <p>Groningen tot aan het Gardameer en terug via de Balkan</p>
+    <p>Groningen tot aan het Gardameer en terug via de Balkan.</p>
     <div class="hero-stats">
+      <div class="stat-pill stat-pill--countdown" id="countdown-pill" hidden><b id="countdown-days"></b><span>Dagen tot vertrek</span></div>
       <div class="stat-pill"><b>7</b><span>Bestemmingen</span></div>
+      <div class="stat-pill"><b id="countries-count">–</b><span>Landen</span></div>
       <div class="stat-pill"><b>3527</b><span>Kilometer</span></div>
       <div class="stat-pill"><b>20</b><span>Dagen onderweg</span></div>
     </div>
@@ -338,7 +342,7 @@ const stops = [
     dateStart: "2026-08-28",
     dateEnd: "2026-08-31",
     lat: 48.5734, lon: 7.7521,
-    hotel: { label: "Hotel", link: "https://www.booking.com/Share-0OJoS9", note: "Parkeren gereserveerd" },
+    hotel: { label: "Séjours & Affaires Strasbourg Kléber", link: "https://www.booking.com/Share-0OJoS9", note: "Parkeren gereserveerd" },
     sights: [
       { n: "Cathédrale Notre-Dame de Strasbourg", r: 4.8 },
       { n: "Place Kléber", r: 4.5 },
@@ -352,7 +356,7 @@ const stops = [
     dateStart: "2026-08-31",
     dateEnd: "2026-09-02",
     lat: 47.5596, lon: 7.5886,
-    hotel: { label: "Appartement", link: "https://www.booking.com/Share-ixAonz", note: "Geboekt via ProtonMail · parkeren aan de weg, nog uitzoeken" },
+    hotel: { label: "Casa Ländli", link: "https://www.booking.com/Share-ixAonz", note: "Geboekt via ProtonMail · parkeren aan de weg, nog uitzoeken" },
     sights: [
       { n: "Museum Tinguely", r: null },
       { n: "Basel Cathedral (Münster)", r: 4.6 },
@@ -366,7 +370,7 @@ const stops = [
     dateStart: "2026-09-02",
     dateEnd: "2026-09-04",
     lat: 45.5758, lon: 10.6215,
-    hotel: { label: "Hotel", link: "https://www.booking.com/Share-EBNmLE", note: "Parkeren gratis" },
+    hotel: { label: "Hotel Residence La Rotonda", link: "https://www.booking.com/Share-EBNmLE", note: "Parkeren gratis" },
     sights: [
       { n: "Castello Scaligero di Sirmione", r: 4.6 },
       { n: "Vittoriale degli Italiani", r: 4.7 },
@@ -380,7 +384,7 @@ const stops = [
     dateStart: "2026-09-04",
     dateEnd: "2026-09-07",
     lat: 45.8150, lon: 15.9819,
-    hotel: { label: "Appartement", link: "https://www.booking.com/Share-gvfG7Z2", note: "Public parking · dagtrip Podgarić Monument op 5 sept" },
+    hotel: { label: "Servus Zagreb Town Centre", link: "https://www.booking.com/Share-gvfG7Z2", note: "Public parking · dagtrip Podgarić Monument op 5 sept" },
     sights: [
       { n: "Lotrščak Tower", r: 4.7 },
       { n: "Cathedral of Zagreb", r: 4.6 },
@@ -395,7 +399,7 @@ const stops = [
     dateStart: "2026-09-07",
     dateEnd: "2026-09-09",
     lat: 48.1486, lon: 17.1077,
-    hotel: { label: "Appartement", link: "https://www.booking.com/Share-sUqvtdQ", note: "⚠️ Public parking — check alternatief" },
+    hotel: { label: "Downtown Bratislava B&B", link: "https://www.booking.com/Share-sUqvtdQ", note: "⚠️ Public parking — check alternatief" },
     sights: [
       { n: "Bratislava Castle", r: 4.5 },
       { n: "Hviezdoslavovo námestie", r: 4.6 },
@@ -409,7 +413,7 @@ const stops = [
     dateStart: "2026-09-09",
     dateEnd: "2026-09-12",
     lat: 48.3069, lon: 14.2858,
-    hotel: { label: "Hotel", link: "https://www.booking.com/Share-gAn9QaT", note: "Nog reserveren · parkeren gratis · Ars Electronica 10–11 sept" },
+    hotel: { label: "Air Linz Residence", link: "https://www.booking.com/Share-gAn9QaT", note: "Nog reserveren · parkeren gratis · Ars Electronica 10–11 sept" },
     sights: [
       { n: "Ars Electronica Center", r: 4.5 },
       { n: "Linz Hauptplatz", r: 4.6 },
@@ -423,7 +427,7 @@ const stops = [
     dateStart: "2026-09-12",
     dateEnd: "2026-09-16",
     lat: 48.1351, lon: 11.5820,
-    hotel: { label: "Hotel", link: "https://www.booking.com/Share-phrrFbl", note: "Gärtnerplatzviertel/Glockenbach · Oktoberfest-timing checken" },
+    hotel: { label: "Homaris Apartments Therese", link: "https://www.booking.com/Share-phrrFbl", note: "Gärtnerplatzviertel/Glockenbach · Oktoberfest-timing checken" },
     sights: [
       { n: "Marienplatz", r: 4.7 },
       { n: "Englischer Garten", r: 4.7 },
@@ -432,6 +436,16 @@ const stops = [
     ]
   }
 ];
+
+document.getElementById('countries-count').textContent = new Set(stops.map(s => s.country)).size;
+
+const departureDate = "2026-08-28";
+const daysToDeparture = daysUntil(departureDate);
+if(daysToDeparture >= 0){
+  const countdownPill = document.getElementById('countdown-pill');
+  document.getElementById('countdown-days').textContent = daysToDeparture;
+  countdownPill.hidden = false;
+}
 
 const WMO = {
   0:["Helder","☀️"],1:["Overwegend helder","🌤️"],2:["Half bewolkt","⛅"],3:["Bewolkt","☁️"],
