@@ -260,6 +260,15 @@ details[open] .chevron{transform:rotate(90deg);}
   white-space:nowrap;
 }
 
+.sights-row{
+  display:flex;
+  gap:14px;
+  align-items:stretch;
+}
+.sights-col{
+  flex:1 1 50%;
+  min-width:0;
+}
 .sights{
   list-style:none;
   margin:0;
@@ -284,6 +293,28 @@ details[open] .chevron{transform:rotate(90deg);}
   flex-shrink:0;
 }
 
+.landmark{
+  flex:1 1 50%;
+  min-width:0;
+  display:flex;
+  flex-direction:column;
+}
+.landmark img{
+  width:100%;
+  flex:1;
+  min-height:140px;
+  object-fit:cover;
+  border-radius:10px;
+  display:block;
+}
+.landmark-credit{
+  font-size:10px;
+  color:var(--faint);
+  margin-top:4px;
+  text-decoration:none;
+}
+.landmark-credit:hover{text-decoration:underline;}
+
 footer{
   text-align:center;
   padding:8px 20px 40px;
@@ -298,4 +329,6 @@ footer{
   .dot{left:6px;}
   .rail::before{left:17px;}
   .stat-pill--countdown{flex-basis:100%;}
+  .sights-row{flex-direction:column;}
+  .landmark img{min-height:180px;}
 }
