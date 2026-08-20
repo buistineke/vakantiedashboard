@@ -247,7 +247,6 @@
     padding:14px 16px;
   }
   .hotel-name{font-weight:700;font-size:14.5px;}
-  .hotel-price{color:var(--violet);font-weight:700;}
   .hotel-meta{color:var(--muted);font-size:12.5px;margin-top:4px;line-height:1.4;}
   .hotel-link{
     flex-shrink:0;
@@ -330,7 +329,7 @@ const stops = [
     dateStart: "2026-08-28",
     dateEnd: "2026-08-31",
     lat: 48.5734, lon: 7.7521,
-    hotel: { label: "Hotel", price: "€242,55", link: "https://www.booking.com/Share-0OJoS9", note: "Parkeren gereserveerd · €18/dag" },
+    hotel: { label: "Hotel", link: "https://www.booking.com/Share-0OJoS9", note: "Parkeren gereserveerd · €18/dag" },
     sights: [
       { n: "Cathédrale Notre-Dame de Strasbourg", r: 4.8 },
       { n: "Place Kléber", r: 4.5 },
@@ -344,7 +343,7 @@ const stops = [
     dateStart: "2026-08-31",
     dateEnd: "2026-09-02",
     lat: 47.5596, lon: 7.5886,
-    hotel: { label: "Appartement", price: "€220,-", link: "https://www.booking.com/Share-ixAonz", note: "Geboekt via ProtonMail · parkeren aan de weg, nog uitzoeken" },
+    hotel: { label: "Appartement", link: "https://www.booking.com/Share-ixAonz", note: "Geboekt via ProtonMail · parkeren aan de weg, nog uitzoeken" },
     sights: [
       { n: "Museum Tinguely", r: null },
       { n: "Basel Cathedral (Münster)", r: 4.6 },
@@ -358,7 +357,7 @@ const stops = [
     dateStart: "2026-09-02",
     dateEnd: "2026-09-04",
     lat: 45.5758, lon: 10.6215,
-    hotel: { label: "Hotel", price: "€302,40", link: "https://www.booking.com/Share-EBNmLE", note: "Parkeren gratis" },
+    hotel: { label: "Hotel", link: "https://www.booking.com/Share-EBNmLE", note: "Parkeren gratis" },
     sights: [
       { n: "Castello Scaligero di Sirmione", r: 4.6 },
       { n: "Vittoriale degli Italiani", r: 4.7 },
@@ -372,7 +371,7 @@ const stops = [
     dateStart: "2026-09-04",
     dateEnd: "2026-09-07",
     lat: 45.8150, lon: 15.9819,
-    hotel: { label: "Appartement", price: "€190,-", link: "https://www.booking.com/Share-gvfG7Z2", note: "Public parking €10/dag · dagtrip Podgarić Monument op 5 sept" },
+    hotel: { label: "Appartement", link: "https://www.booking.com/Share-gvfG7Z2", note: "Public parking €10/dag · dagtrip Podgarić Monument op 5 sept" },
     sights: [
       { n: "Lotrščak Tower", r: 4.7 },
       { n: "Cathedral of Zagreb", r: 4.6 },
@@ -387,7 +386,7 @@ const stops = [
     dateStart: "2026-09-07",
     dateEnd: "2026-09-09",
     lat: 48.1486, lon: 17.1077,
-    hotel: { label: "Appartement", price: "€129,-", link: "https://www.booking.com/Share-sUqvtdQ", note: "⚠️ Public parking €2/uur — check alternatief" },
+    hotel: { label: "Appartement", link: "https://www.booking.com/Share-sUqvtdQ", note: "⚠️ Public parking €2/uur — check alternatief" },
     sights: [
       { n: "Bratislava Castle", r: 4.5 },
       { n: "Hviezdoslavovo námestie", r: 4.6 },
@@ -401,7 +400,7 @@ const stops = [
     dateStart: "2026-09-09",
     dateEnd: "2026-09-12",
     lat: 48.3069, lon: 14.2858,
-    hotel: { label: "Hotel", price: "€344,67", link: "https://www.booking.com/Share-gAn9QaT", note: "Nog reserveren · parkeren gratis · Ars Electronica 10–11 sept" },
+    hotel: { label: "Hotel", link: "https://www.booking.com/Share-gAn9QaT", note: "Nog reserveren · parkeren gratis · Ars Electronica 10–11 sept" },
     sights: [
       { n: "Ars Electronica Center", r: 4.5 },
       { n: "Linz Hauptplatz", r: 4.6 },
@@ -415,7 +414,7 @@ const stops = [
     dateStart: "2026-09-12",
     dateEnd: "2026-09-16",
     lat: 48.1351, lon: 11.5820,
-    hotel: { label: "Hotel", price: "€551,-", link: "https://www.booking.com/Share-phrrFbl", note: "Gärtnerplatzviertel/Glockenbach · Oktoberfest-timing checken" },
+    hotel: { label: "Hotel", link: "https://www.booking.com/Share-phrrFbl", note: "Gärtnerplatzviertel/Glockenbach · Oktoberfest-timing checken" },
     sights: [
       { n: "Marienplatz", r: 4.7 },
       { n: "Englischer Garten", r: 4.7 },
@@ -508,7 +507,7 @@ stops.forEach((stop, i) => {
         <div class="section-label">Hotel</div>
         <div class="hotel-card">
           <div>
-            <div class="hotel-name">${stop.hotel.label} · <span class="hotel-price">${stop.hotel.price}</span></div>
+            <div class="hotel-name">${stop.hotel.label}</div>
             <div class="hotel-meta">${stop.hotel.note}</div>
           </div>
           <a class="hotel-link" href="${stop.hotel.link}" target="_blank" rel="noopener">Booking</a>
