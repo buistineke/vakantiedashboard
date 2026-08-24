@@ -8,20 +8,35 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Lustria&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
+<script>
+(function(){
+  try{
+    var saved = localStorage.getItem('vakantie-theme');
+    var theme;
+    if(saved === 'light' || saved === 'dark'){
+      theme = saved;
+    } else {
+      var h = new Date().getHours();
+      theme = (h >= 20 || h < 7) ? 'dark' : 'light';
+    }
+    document.documentElement.setAttribute('data-theme', theme);
+  }catch(e){}
+})();
+</script>
 </head>
 <body>
 
 <div class="hero">
   <div class="hero-inner">
+    <button id="theme-toggle" class="theme-toggle" aria-label="Wissel tussen licht en donker" type="button">🌙</button>
     <span class="eyebrow">🧭 28 aug — 16 sept</span>
     <h1>Roadtrip 2026</h1>
     <p>Groningen tot aan het Gardameer en terug via de Balkan.</p>
     <div class="hero-stats">
       <div class="stat-pill stat-pill--countdown" id="countdown-pill" hidden><b id="countdown-days"></b><span>Dagen tot vertrek</span></div>
-      <div class="stat-pill"><b>7</b><span>Bestemmingen</span></div>
       <div class="stat-pill"><b id="countries-count">–</b><span>Landen</span></div>
       <div class="stat-pill"><b>3527</b><span>Kilometer</span></div>
-      <div class="stat-pill"><b>20</b><span>Dagen onderweg</span></div>
+      <div class="stat-pill"><b>20</b><span>Reisdagen</span></div>
     </div>
   </div>
 </div>
