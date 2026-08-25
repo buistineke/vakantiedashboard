@@ -96,7 +96,7 @@ h1, .place-name{
   align-items:center;
   justify-content:center;
 }
-#lang-toggle{font-size:12.5px;letter-spacing:0.02em;}
+#lang-toggle{font-size:18px;}
 .hero-inner{
   max-width:820px;
   margin:0 auto;

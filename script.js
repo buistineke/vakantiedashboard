@@ -413,7 +413,7 @@ function renderHeroText(){
   document.getElementById('footer-text').textContent = t().footer;
   document.getElementById('theme-toggle').setAttribute('aria-label', t().themeToggleLabel);
   document.getElementById('lang-toggle').setAttribute('aria-label', t().langToggleLabel);
-  document.getElementById('lang-toggle').textContent = LANG === 'nl' ? 'EN' : 'NL';
+  document.getElementById('lang-toggle').textContent = LANG === 'nl' ? '🇬🇧' : '🇳🇱';
 }
 
 document.getElementById('countries-count').textContent = new Set(stops.map(s => s.country)).size;
