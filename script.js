@@ -163,7 +163,6 @@ const UI = {
     weerLabel: "Weer",
     hotelLabel: "Hotel",
     sightsLabel: "Bezienswaardigheden",
-    bekijken: "Bekijken",
     route: "Route",
     footer: "Weer via Open-Meteo · verschijnt automatisch zodra een bestemming binnen 15 dagen ligt",
     pending: "nog te ver vooruit",
@@ -192,7 +191,6 @@ const UI = {
     weerLabel: "Weather",
     hotelLabel: "Hotel",
     sightsLabel: "Attractions",
-    bekijken: "View",
     route: "Route",
     footer: "Weather via Open-Meteo · appears automatically once a stop is within 15 days",
     pending: "too far ahead",
@@ -358,12 +356,11 @@ function renderStops(){
           <div class="section-label">${t().hotelLabel}</div>
           <div class="hotel-card">
             <div>
-              <div class="hotel-name">${stop.hotel.label}</div>
+              <a class="hotel-name" href="${stop.hotel.link}" target="_blank" rel="noopener">${stop.hotel.label}</a>
               <div class="hotel-meta">${stop.hotel.note[LANG]}</div>
             </div>
             <div class="hotel-actions">
               <a class="hotel-link hotel-link--primary" href="${mapsUrl(stop.hotel.address)}" target="_blank" rel="noopener">${t().route}</a>
-              <a class="hotel-link" href="${stop.hotel.link}" target="_blank" rel="noopener">${t().bekijken}</a>
             </div>
           </div>
 
