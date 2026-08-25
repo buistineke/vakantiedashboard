@@ -475,6 +475,16 @@ document.getElementById('theme-toggle').addEventListener('click', () => {
   applyTheme(next);
 });
 
+function reevaluateAutoTheme(){
+  const saved = localStorage.getItem(THEME_KEY);
+  if(saved === 'light' || saved === 'dark') return;
+  applyTheme(isNightNow() ? 'dark' : 'light');
+}
+setInterval(reevaluateAutoTheme, 5 * 60 * 1000);
+document.addEventListener('visibilitychange', () => {
+  if(!document.hidden) reevaluateAutoTheme();
+});
+
 const AUTH_KEY = 'vakantie-auth';
 const AUTH_PASSWORD = 'okletsgo';
 
