@@ -263,21 +263,6 @@ const visitedStops = getVisited();
 
 const weatherCache = {};
 
-function todayDateStr(){
-  const d = new Date();
-  const y = d.getFullYear();
-  const m = String(d.getMonth() + 1).padStart(2, '0');
-  const day = String(d.getDate()).padStart(2, '0');
-  return `${y}-${m}-${day}`;
-}
-
-function isCurrentStop(stop){
-  const today = new Date(); today.setHours(0,0,0,0);
-  const start = new Date(stop.dateStart+"T00:00:00");
-  const end = new Date(stop.dateEnd+"T00:00:00");
-  return today >= start && today <= end;
-}
-
 async function fetchWeather(stop){
   const dUntil = daysUntil(stop.dateStart);
   if(dUntil > 15){
@@ -285,17 +270,14 @@ async function fetchWeather(stop){
     renderWeather(stop);
     return;
   }
-  // While we're actually at this destination, show today's weather instead of the arrival-day forecast.
-  const forecastDate = isCurrentStop(stop) ? todayDateStr() : stop.dateStart;
   try{
-    const url = `https://api.open-meteo.com/v1/forecast?latitude=${stop.lat}&longitude=${stop.lon}&daily=weather_code,temperature_2m_max,temperature_2m_min&timezone=auto&start_date=${forecastDate}&end_date=${forecastDate}`;
+    const url = `https://api.open-meteo.com/v1/forecast?latitude=${stop.lat}&longitude=${stop.lon}&daily=weather_code,temperature_2m_max,temperature_2m_min&timezone=auto&start_date=${stop.dateStart}&end_date=${stop.dateStart}`;
     const res = await fetch(url);
     if(!res.ok) throw new Error(`HTTP ${res.status}`);
     const data = await res.json();
     if(data.error) throw new Error(data.reason || 'API error');
     weatherCache[stop.name] = {
       state: 'ok',
-      date: forecastDate,
       code: data.daily.weather_code[0],
       tmax: Math.round(data.daily.temperature_2m_max[0]),
       tmin: Math.round(data.daily.temperature_2m_min[0])
@@ -334,7 +316,7 @@ function renderWeather(stop){
       <span class="icon-big">${wmo.icon}</span>
       <div>
         <div><span class="temp-max">${cached.tmax}°</span> <span class="temp-min">/ ${cached.tmin}°</span></div>
-        <div class="weather-note">${label} · ${t().forecastFor(fmtDate(cached.date))}</div>
+        <div class="weather-note">${label} · ${t().forecastFor(fmtDate(stop.dateStart))}</div>
       </div>
     </div>`;
 }
