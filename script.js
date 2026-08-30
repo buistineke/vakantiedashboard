@@ -429,6 +429,32 @@ const totalTripDays = Math.round((new Date(tripEnd+"T00:00:00") - new Date(tripS
 const daysLeftInTrip = Math.max(0, Math.min(totalTripDays, daysUntil(tripEnd) + 1));
 document.getElementById('travel-days-count').textContent = daysLeftInTrip;
 
+// One entry per driving day: the date of the leg and its distance in km.
+const LEGS = [
+  { date: "2026-08-28", km: 662 }, // Groningen -> Strasbourg
+  { date: "2026-08-31", km: 144 }, // Strasbourg -> Basel
+  { date: "2026-09-02", km: 483 }, // Basel -> Gardameer
+  { date: "2026-09-04", km: 566 }, // Gardameer -> Zagreb
+  { date: "2026-09-07", km: 340 }, // Zagreb -> Bratislava
+  { date: "2026-09-09", km: 270 }, // Bratislava -> Linz
+  { date: "2026-09-12", km: 231 }, // Linz -> München
+  { date: "2026-09-16", km: 831 }  // München -> Groningen
+];
+const TOTAL_KM = LEGS.reduce((sum, leg) => sum + leg.km, 0);
+
+function kmRemaining(){
+  const now = new Date();
+  return LEGS.reduce((remaining, leg) => {
+    const arrivedCutoff = new Date(leg.date + "T16:00:00");
+    return now >= arrivedCutoff ? remaining - leg.km : remaining;
+  }, TOTAL_KM);
+}
+
+function updateKmCount(){
+  document.getElementById('km-count').textContent = kmRemaining();
+}
+updateKmCount();
+
 function updateRailLine(){
   const dots = container.querySelectorAll('.dot');
   if(!dots.length) return;
@@ -483,9 +509,13 @@ function reevaluateAutoTheme(){
   if(saved === 'light' || saved === 'dark') return;
   applyTheme(isNightNow() ? 'dark' : 'light');
 }
-setInterval(reevaluateAutoTheme, 5 * 60 * 1000);
+function periodicRecheck(){
+  reevaluateAutoTheme();
+  updateKmCount();
+}
+setInterval(periodicRecheck, 5 * 60 * 1000);
 document.addEventListener('visibilitychange', () => {
-  if(!document.hidden) reevaluateAutoTheme();
+  if(!document.hidden) periodicRecheck();
 });
 
 const AUTH_KEY = 'vakantie-auth';
