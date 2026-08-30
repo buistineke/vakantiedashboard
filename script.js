@@ -423,6 +423,12 @@ if(daysToDeparture >= 0){
   countdownPill.hidden = false;
 }
 
+const tripStart = stops[0].dateStart;
+const tripEnd = stops[stops.length - 1].dateEnd;
+const totalTripDays = Math.round((new Date(tripEnd+"T00:00:00") - new Date(tripStart+"T00:00:00")) / 86400000) + 1;
+const daysLeftInTrip = Math.max(0, Math.min(totalTripDays, daysUntil(tripEnd) + 1));
+document.getElementById('travel-days-count').textContent = daysLeftInTrip;
+
 function updateRailLine(){
   const dots = container.querySelectorAll('.dot');
   if(!dots.length) return;
