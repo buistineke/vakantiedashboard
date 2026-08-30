@@ -401,21 +401,44 @@ function renderStops(){
     renderWeather(stop);
 
     const dotEl = div.querySelector('.dot');
-    const placeNameEl = div.querySelector('.place-name');
-    function renderVisited(isVisited){
-      dotEl.classList.toggle('visited', isVisited);
-      placeNameEl.classList.toggle('visited', isVisited);
-      dotEl.textContent = isVisited ? '✓' : (i+1);
-    }
-    renderVisited(visitedStops.has(stop.name));
     dotEl.addEventListener('click', () => {
-      const nowVisited = !visitedStops.has(stop.name);
-      if(nowVisited){ visitedStops.add(stop.name); } else { visitedStops.delete(stop.name); }
+      if(visitedStops.has(stop.name)){ visitedStops.delete(stop.name); } else { visitedStops.add(stop.name); }
       setVisited(visitedStops);
-      renderVisited(nowVisited);
+      updateVisitedUI();
+      updateRailSegments();
     });
   });
-  updateRailLine();
+  updateVisitedUI();
+  refreshRail();
+}
+
+function updateVisitedUI(){
+  container.querySelectorAll('.stop').forEach((div, i) => {
+    const stop = stops[i];
+    const isVisited = visitedStops.has(stop.name);
+    const dotEl = div.querySelector('.dot');
+    const placeNameEl = div.querySelector('.place-name');
+    dotEl.classList.toggle('visited', isVisited);
+    placeNameEl.classList.toggle('visited', isVisited);
+    dotEl.textContent = isVisited ? '✓' : (i+1);
+  });
+}
+
+// A destination counts as "left" once checkout time (16:00 on its last day) has passed.
+function isDeparted(stop){
+  return new Date() >= new Date(stop.dateEnd + "T16:00:00");
+}
+
+function autoMarkDeparted(){
+  let changed = false;
+  stops.forEach(stop => {
+    if(isDeparted(stop) && !visitedStops.has(stop.name)){
+      visitedStops.add(stop.name);
+      changed = true;
+    }
+  });
+  if(changed) setVisited(visitedStops);
+  return changed;
 }
 
 function renderHeroText(){
@@ -483,10 +506,34 @@ function updateRailLine(){
   container.style.setProperty('--line-end', (containerRect.bottom - lastRect.top) + 'px');
 }
 
+// Draws a green segment between two dots once the earlier stop has been left.
+function updateRailSegments(){
+  container.querySelectorAll('.rail-segment').forEach(el => el.remove());
+  const dots = container.querySelectorAll('.dot');
+  if(dots.length < 2) return;
+  const containerRect = container.getBoundingClientRect();
+  for(let i = 0; i < dots.length - 1; i++){
+    if(!visitedStops.has(stops[i].name)) continue;
+    const aRect = dots[i].getBoundingClientRect();
+    const bRect = dots[i+1].getBoundingClientRect();
+    const seg = document.createElement('div');
+    seg.className = 'rail-segment';
+    seg.style.top = (aRect.bottom - containerRect.top) + 'px';
+    seg.style.height = Math.max(0, bRect.top - aRect.bottom) + 'px';
+    container.appendChild(seg);
+  }
+}
+
+function refreshRail(){
+  updateRailLine();
+  updateRailSegments();
+}
+
 renderHeroText();
+autoMarkDeparted();
 renderStops();
-container.addEventListener('toggle', updateRailLine, true);
-window.addEventListener('resize', updateRailLine);
+container.addEventListener('toggle', refreshRail, true);
+window.addEventListener('resize', refreshRail);
 
 document.getElementById('lang-toggle').addEventListener('click', () => {
   LANG = LANG === 'nl' ? 'en' : 'nl';
@@ -530,6 +577,10 @@ function reevaluateAutoTheme(){
 function periodicRecheck(){
   reevaluateAutoTheme();
   updateKmCount();
+  if(autoMarkDeparted()){
+    updateVisitedUI();
+  }
+  refreshRail();
 }
 setInterval(periodicRecheck, 5 * 60 * 1000);
 document.addEventListener('visibilitychange', () => {
@@ -550,7 +601,7 @@ renderAuthText();
 function unlockApp(){
   document.getElementById('auth-gate').style.display = 'none';
   document.getElementById('app').hidden = false;
-  updateRailLine();
+  refreshRail();
 }
 
 if(localStorage.getItem(AUTH_KEY) === 'ok'){

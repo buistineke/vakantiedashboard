@@ -10,6 +10,7 @@
   --terracotta-dark:#b6491c;
   --mauve:#8b4f63;
   --mauve-soft:#f7e6e1;
+  --visited:#2f9e5c;
   --coral:#d9553a;
   --sun:#e4a24a;
   --shadow: 0 1px 2px rgba(43,27,34,0.05), 0 8px 24px -12px rgba(43,27,34,0.12);
@@ -35,6 +36,7 @@
   --terracotta-dark:#e2703f;
   --mauve:#c98ba0;
   --mauve-soft:#33232a;
+  --visited:#4cb478;
   --coral:#e2705a;
   --sun:#e9b667;
   --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 24px -12px rgba(0,0,0,0.5);
@@ -169,6 +171,14 @@ main{
   opacity:0.35;
   border-radius:2px;
 }
+.rail-segment{
+  position:absolute;
+  left:23px;
+  width:2px;
+  background:var(--visited);
+  border-radius:2px;
+  z-index:1;
+}
 
 .stop{
   position:relative;
@@ -196,7 +206,7 @@ main{
   transition:background-color 0.15s ease;
 }
 .dot.visited{
-  background:var(--mauve);
+  background:var(--visited);
 }
 .place-name.visited{
   text-decoration:line-through;
@@ -488,6 +498,7 @@ footer{
   .stop{padding-left:52px;}
   .dot{left:6px;}
   .rail::before{left:17px;}
+  .rail-segment{left:17px;}
   .stat-pill--countdown{flex-basis:100%;}
   .sights-row{flex-direction:column;}
   .hotel-actions{flex-direction:column;}
