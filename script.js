@@ -310,6 +310,8 @@ function renderWeather(stop){
   const el = document.getElementById('w-'+stop.name);
   const bodyEl = document.getElementById('wd-'+stop.name);
   if(!el || !bodyEl) return;
+  // Once we've left a destination, its forecast chip no longer belongs in the collapsed summary.
+  el.style.display = isDeparted(stop) ? 'none' : '';
   const cached = weatherCache[stop.name];
   el.classList.remove('good','bad','pending');
   if(!cached || cached.state === 'pending'){
@@ -580,6 +582,7 @@ function periodicRecheck(){
   if(autoMarkDeparted()){
     updateVisitedUI();
   }
+  stops.forEach(renderWeather);
   refreshRail();
 }
 setInterval(periodicRecheck, 5 * 60 * 1000);
